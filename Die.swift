@@ -26,11 +26,7 @@ let newline = "\n"
 /// - parameter message: The error message to print as failure reason
 /// - parameter block: The block to execute in which a throw will cause a die()
 public func dieOnThrow(@autoclosure message: () -> String, @noescape block: () throws -> Void) {
-    do {
-        try block()
-    } catch {
-        die(message)
-    }
+    dieOnThrow(message, block: block)
 }
 
 /// Convenience method to execute throwing functions and die on throw
@@ -42,5 +38,22 @@ public func dieOnThrow<T>(@autoclosure message: () -> String, @noescape block: (
         return try block()
     } catch {
         die(message)
+    }
+}
+
+/// Convenience method to execute throwing functions and die on throw
+/// - parameter block: The block to execute in which a throw will cause a die()
+public func dieOnThrow(@noescape block: () throws -> Void) {
+    dieOnThrow(block)
+}
+
+/// Convenience method to execute throwing functions and die on throw
+/// - parameter block: The block to execute in which a throw will cause a die()
+/// - returns: The return value of the block is forwarded
+public func dieOnThrow<T>(@noescape block: () throws -> T) -> T {
+    do {
+        return try block()
+    } catch {
+        die()
     }
 }

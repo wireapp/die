@@ -3,7 +3,17 @@
 
 ### Usage
 
-Call `die()` or `die("Oh no!")` to print the current callstack and exit with code 1
+Call `die()` or `die("Oh no!")` to print the current callstack and exit with code 1  
+There also is a convenience function to work with throwing functions:
+
+```swift
+let contents = dieOnThrow("Unable to get the contents URL \(someURL)") {
+    let contents = try fm.contentsOfDirectoryAtURL(someURL, includingPropertiesForKeys: nil, options: [])
+    // Do more stuff...
+    return contents
+}
+```
+
 
 ### Installation
 

@@ -30,6 +30,13 @@ let contents = dieOnThrow("Unable to get the contents of \(someURL)") {
 }
 ```
 
+Additionaly there are functions to die in case an expression evaluates to nil, or not to nil:
+```swift
+let result = dieIfNil(someObject.methodThatMightReturnNil())
+dieIfNotNil(someObject.methodThatReturnsAnError())
+```
+
+
 ### Installation
 
 Add `github "daehn/die"` to your `Cartfile`

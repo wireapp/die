@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		AFA1DA031C90B4F600C65B90 /* Die.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF0D678C1C8DCD25007CE00F /* Die.framework */; };
 		AFA1DA0B1C90B50700C65B90 /* DieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DA091C90B50700C65B90 /* DieTests.swift */; };
-		AFA1DA0C1C90B50700C65B90 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AFA1DA0A1C90B50700C65B90 /* Info.plist */; };
 		BF0D67901C8DCD25007CE00F /* Die.h in Headers */ = {isa = PBXBuildFile; fileRef = BF0D678F1C8DCD25007CE00F /* Die.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BF0D67981C8DCD2B007CE00F /* Die.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D67971C8DCD2B007CE00F /* Die.swift */; };
 /* End PBXBuildFile section */
@@ -181,7 +180,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFA1DA0C1C90B50700C65B90 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +380,7 @@
 				AFA1DA071C90B4F600C65B90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF0D67861C8DCD25007CE00F /* Build configuration list for PBXProject "Die" */ = {
 			isa = XCConfigurationList;

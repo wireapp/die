@@ -70,6 +70,43 @@ class DieTests: XCTestCase {
         assertMessagePrinted(message, printHistory)
     }
 
+    func testThatItCallsDieIfNotNil() {
+        // when
+        dispatchAndWaitForDie(timeout: 2) {
+            dieIfNotNil(42)
+        }
+
+        // then
+        XCTAssertEqual(callCount, 1)
+        XCTAssertEqual(exitStatus, EXIT_FAILURE)
+        assertMessagePrinted("Object was supposed to be nil: 42", printHistory)
+    }
+
+    func testThatItCallsDieIfNil() {
+        // when
+        dispatchAndWaitForDie(timeout: 2) {
+            dieIfNil(nil)
+        }
+
+        // then
+        XCTAssertEqual(callCount, 1)
+        XCTAssertEqual(exitStatus, EXIT_FAILURE)
+    }
+
+    func testThatItDoesNotCallDieWhen_DieIfNil_isCalledWithNonNil() {
+        // when
+        var result: Int?
+        dispatchAndWaitForDie(timeout: 2) {
+            result = dieIfNil(42)
+            self.expectation?.fulfill()
+        }
+
+        // then
+        XCTAssertEqual(result, 42)
+        XCTAssertEqual(callCount, 0)
+        XCTAssertNil(exitStatus)
+    }
+
     func testThatItCallsDieOnThrow() {
         // when
         dispatchAndWaitForDie(timeout: 2) {
@@ -97,8 +134,10 @@ class DieTests: XCTestCase {
         // then
         XCTAssertEqual(callCount, 1)
         XCTAssertEqual(exitStatus, EXIT_FAILURE)
-        XCTAssertEqual(printHistory.count, 2)
-        assertMessagePrinted(message, printHistory)
+        XCTAssertEqual(printHistory.count, 3)
+        let errorMessage = printHistory.first!
+        XCTAssertEqual(errorMessage.first as? String, "Error: Error")
+        assertMessagePrinted(message, Array(printHistory.dropFirst()))
     }
 
     func testThatItDoesNotCallDieIfItDoesNotThrow() {

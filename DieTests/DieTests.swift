@@ -17,12 +17,14 @@ class DieTests: XCTestCase {
     var exitStatus: Int32?
     var printHistory: [[Any]] = []
     let spinMainQueue = NSThread.sleepForTimeInterval
+    var expectation: XCTestExpectation?
 
     // MARK: - Mocking
 
     @noreturn private func mockExit(status: Int32) {
         exitStatus = status
         callCount++
+        expectation?.fulfill()
         repeat { NSRunLoop.currentRunLoop().run() } while (true)
     }
 
@@ -47,8 +49,7 @@ class DieTests: XCTestCase {
 
     func testThatItCallsDie() {
         // when
-        dispatch(die)
-        spinMainQueue(1)
+        dispatchAndWaitForDie(timeout: 2, block: die)
 
         // then
         XCTAssertEqual(callCount, 1)
@@ -60,8 +61,7 @@ class DieTests: XCTestCase {
         let message = "🚫"
 
         // when
-        dispatch { die(message) }
-        spinMainQueue(1)
+        dispatchAndWaitForDie(timeout: 2) { die(message) }
 
         // then
         XCTAssertEqual(callCount, 1)
@@ -71,13 +71,11 @@ class DieTests: XCTestCase {
 
     func testThatItCallsDieOnThrow() {
         // when
-        dispatch {
+        dispatchAndWaitForDie(timeout: 2) {
             dieOnThrow {
                 throw "Error"
             }
         }
-
-        spinMainQueue(1)
 
         // then
         XCTAssertEqual(callCount, 1)
@@ -89,13 +87,11 @@ class DieTests: XCTestCase {
         let message = "🚫"
 
         // when
-        dispatch {
+        dispatchAndWaitForDie(timeout: 2) {
             dieOnThrow(message) {
                 throw "Error"
             }
         }
-
-        spinMainQueue(1)
 
         // then
         XCTAssertEqual(callCount, 1)
@@ -109,13 +105,12 @@ class DieTests: XCTestCase {
         var solution: Int?
 
         // when
-        dispatch {
+        self.dispatch {
             solution = dieOnThrow {
                 return 42
             }
         }
-
-        spinMainQueue(1)
+        spinMainQueue(2)
 
         // then
         XCTAssertEqual(callCount, 0)
@@ -135,5 +130,17 @@ class DieTests: XCTestCase {
     func dispatch(block: dispatch_block_t) {
         let queue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
         dispatch_async(queue, block)
+    }
+
+    func waitWithTimeout(timeout: NSTimeInterval, block: dispatch_block_t) {
+        expectation = expectationWithDescription("Wait for die() to be called")
+        block()
+        waitForExpectationsWithTimeout(timeout, handler: nil)
+    }
+
+    func dispatchAndWaitForDie(timeout timeout: NSTimeInterval, block: dispatch_block_t) {
+        waitWithTimeout(timeout) {
+            self.dispatch(block)
+        }
     }
 }

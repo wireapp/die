@@ -20,6 +20,19 @@ let newline = "\n"
     internalExit(EXIT_FAILURE)
 }
 
+/// Returns the result of @c closure or dies if the result is nil
+public func dieIfNil<T>(@autoclosure closure: () -> T?) -> T {
+    guard let result = closure() else { die() }
+    return result
+}
+
+/// Dies if the result of @c closure is not nil, useful when checking for errors
+public func dieIfNotNil(@autoclosure closure: () -> Any?) {
+    if let object = closure() {
+        die("Object was supposed to be nil: \(object)")
+    }
+}
+
 /// Convenience method to execute throwing functions and die on throw
 /// - parameter message: The error message to print as failure reason
 /// - parameter block: The block to execute in which a throw will cause a die()
@@ -28,6 +41,7 @@ public func dieOnThrow<T>(@autoclosure message: () -> String, @noescape block: (
     do {
         return try block()
     } catch {
+        internalPrint("Error: \(error)")
         die(message)
     }
 }
@@ -39,7 +53,7 @@ public func dieOnThrow<T>(@noescape block: () throws -> T) -> T {
     do {
         return try block()
     } catch {
-        die()
+        die("Error: \(error)")
     }
 }
 

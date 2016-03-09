@@ -42,6 +42,7 @@ class DieTests: XCTestCase {
     
     override func tearDown() {
         (internalExit, internalPrint) = (exit, _internalPrint)
+        expectation = nil
         super.tearDown()
     }
 
@@ -105,12 +106,12 @@ class DieTests: XCTestCase {
         var solution: Int?
 
         // when
-        self.dispatch {
+        dispatchAndWaitForDie(timeout: 2) {
             solution = dieOnThrow {
+                self.expectation?.fulfill()
                 return 42
             }
         }
-        spinMainQueue(2)
 
         // then
         XCTAssertEqual(callCount, 0)

@@ -1,5 +1,5 @@
-## Die, μ-framework to exit swift scripts    [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-![](header.jpg)
+## Die, μ-framework to exit swift scripts    <a href='https://circleci.com/gh/daehn/Equal/tree/master' target='_blank'><img src='https://circleci.com/gh/daehn/die.svg?style=svg' height='20px' /></a> [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 ### Usage
 
 Calling `die()` or `die("Oh no!")` prints the current callstack, the optional message and calls `exit(EXIT_FAILURE)` afterwards.  

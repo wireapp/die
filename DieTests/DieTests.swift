@@ -16,7 +16,7 @@ class DieTests: XCTestCase {
     var callCount = 0
     var exitStatus: Int32?
     var printHistory: [[Any]] = []
-    let spinMainQueue = NSThread.sleepForTimeInterval
+    let spinQueue = NSThread.sleepForTimeInterval
     var expectation: XCTestExpectation?
 
     // MARK: - Mocking
@@ -25,7 +25,7 @@ class DieTests: XCTestCase {
         exitStatus = status
         callCount++
         expectation?.fulfill()
-        repeat { NSRunLoop.currentRunLoop().run() } while (true)
+        repeat { spinQueue(0.1) } while (true)
     }
 
     func mockPrint(items: Any...) {

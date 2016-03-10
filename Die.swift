@@ -20,6 +20,16 @@ let newline = "\n"
     internalExit(EXIT_FAILURE)
 }
 
+/// Dies if the boolean result of @c closure is @c true
+public func dieIfTrue(@autoclosure closure: () -> Bool) {
+    dieIfFalse(!closure())
+}
+
+/// Dies if the boolean result of @c closure is @c false
+public func dieIfFalse(@autoclosure closure: () -> Bool) {
+    guard closure() else { die() }
+}
+
 /// Returns the result of @c closure or dies if the result is nil
 public func dieIfNil<T>(@autoclosure closure: () -> T?) -> T {
     guard let result = closure() else { die() }

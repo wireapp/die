@@ -16,7 +16,7 @@ class DieTests: XCTestCase {
     var callCount = 0
     var exitStatus: Int32?
     var printHistory: [[Any]] = []
-    let spinMainQueue = NSThread.sleepForTimeInterval
+    let spinQueue = NSThread.sleepForTimeInterval
     var expectation: XCTestExpectation?
 
     // MARK: - Mocking
@@ -25,7 +25,7 @@ class DieTests: XCTestCase {
         exitStatus = status
         callCount++
         expectation?.fulfill()
-        repeat { NSRunLoop.currentRunLoop().run() } while (true)
+        repeat { spinQueue(0.1) } while (true)
     }
 
     func mockPrint(items: Any...) {
@@ -50,7 +50,7 @@ class DieTests: XCTestCase {
 
     func testThatItCallsDie() {
         // when
-        dispatchAndWaitForDie(timeout: 2, block: die)
+        assertThatItCallsDie { die() }
 
         // then
         XCTAssertEqual(callCount, 1)
@@ -62,62 +62,75 @@ class DieTests: XCTestCase {
         let message = "🚫"
 
         // when
-        dispatchAndWaitForDie(timeout: 2) { die(message) }
+        assertThatItCallsDie { die(message) }
 
         // then
-        XCTAssertEqual(callCount, 1)
         XCTAssertEqual(printHistory.count, 2)
         assertMessagePrinted(message, printHistory)
     }
 
+    func testThatItCallsDieIfFalseIfExpressionEvalutesToFalse() {
+        assertThatItCallsDie {
+            dieIfFalse(false)
+        }
+    }
+
+    func testThatItDoesNotCallDieIfFalseIfExpressionEvalutesToTrue() {
+        assertThatItCallsDie(false) {
+            dieIfFalse(true)
+            self.expectation?.fulfill()
+        }
+    }
+
+    func testThatItCallsDieIfTrueIfExpressionEvalutesToTrue() {
+        assertThatItCallsDie {
+            dieIfTrue(true)
+            self.expectation?.fulfill()
+        }
+    }
+
+    func testThatItDoesNotCallDieIfTrueIfExpressionEvalutesToFalse() {
+        assertThatItCallsDie(false) {
+            dieIfTrue(false)
+            self.expectation?.fulfill()
+        }
+    }
+
     func testThatItCallsDieIfNotNil() {
         // when
-        dispatchAndWaitForDie(timeout: 2) {
+        assertThatItCallsDie {
             dieIfNotNil(42)
         }
 
         // then
-        XCTAssertEqual(callCount, 1)
-        XCTAssertEqual(exitStatus, EXIT_FAILURE)
         assertMessagePrinted("Object was supposed to be nil: 42", printHistory)
     }
 
     func testThatItCallsDieIfNil() {
-        // when
-        dispatchAndWaitForDie(timeout: 2) {
+        assertThatItCallsDie {
             dieIfNil(nil)
         }
-
-        // then
-        XCTAssertEqual(callCount, 1)
-        XCTAssertEqual(exitStatus, EXIT_FAILURE)
     }
 
     func testThatItDoesNotCallDieWhen_DieIfNil_isCalledWithNonNil() {
         // when
         var result: Int?
-        dispatchAndWaitForDie(timeout: 2) {
+
+        assertThatItCallsDie(false) {
             result = dieIfNil(42)
             self.expectation?.fulfill()
         }
 
         // then
         XCTAssertEqual(result, 42)
-        XCTAssertEqual(callCount, 0)
-        XCTAssertNil(exitStatus)
     }
 
     func testThatItCallsDieOnThrow() {
-        // when
-        dispatchAndWaitForDie(timeout: 2) {
+        assertThatItCallsDie {
             dieOnThrow {
                 throw "Error"
             }
         }
-
-        // then
-        XCTAssertEqual(callCount, 1)
-        XCTAssertEqual(exitStatus, EXIT_FAILURE)
     }
 
     func testThatItCallsDieAndPrintsTheMessageOnThrow() {
@@ -125,15 +138,13 @@ class DieTests: XCTestCase {
         let message = "🚫"
 
         // when
-        dispatchAndWaitForDie(timeout: 2) {
+        assertThatItCallsDie {
             dieOnThrow(message) {
                 throw "Error"
             }
         }
 
         // then
-        XCTAssertEqual(callCount, 1)
-        XCTAssertEqual(exitStatus, EXIT_FAILURE)
         XCTAssertEqual(printHistory.count, 3)
         let errorMessage = printHistory.first!
         XCTAssertEqual(errorMessage.first as? String, "Error: Error")
@@ -143,22 +154,27 @@ class DieTests: XCTestCase {
     func testThatItDoesNotCallDieIfItDoesNotThrow() {
         // given
         var solution: Int?
-
-        // when
-        dispatchAndWaitForDie(timeout: 2) {
-            solution = dieOnThrow {
+        assertThatItCallsDie(false) {
+             solution = dieOnThrow {
                 self.expectation?.fulfill()
                 return 42
             }
         }
 
         // then
-        XCTAssertEqual(callCount, 0)
-        XCTAssertNil(exitStatus)
         XCTAssertEqual(solution, 42)
     }
 
     // MARK: - Helper
+
+    func assertThatItCallsDie(shouldCall: Bool = true, block: () -> Void) {
+        // when
+        dispatchAndWaitForDie(timeout: 2, block: block)
+
+        // then
+        XCTAssertEqual(callCount, shouldCall ? 1 : 0)
+        XCTAssertEqual(exitStatus, shouldCall ? EXIT_FAILURE : nil)
+    }
 
     func assertMessagePrinted(message: String, _ history: [[Any]]) {
         guard let print = history.first else { return XCTFail() }

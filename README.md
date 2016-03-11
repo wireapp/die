@@ -2,8 +2,7 @@
 
 ### Usage
 
-Calling `die()` or `die("Oh no!")` prints the current callstack, the optional message and calls `exit(EXIT_FAILURE)` afterwards.  
-There also are multiple convenience functions to work with throwing functions:
+Calling `die()` or `die("Oh no!")` prints the current callstack, the optional message and calls `exit(EXIT_FAILURE)` afterwards. There also are multiple convenience functions to work with throwing functions:
 
 ```swift
 dieOnThrow {
@@ -33,6 +32,17 @@ Additionaly there are functions to die in case an expression evaluates to nil, o
 ```swift
 let result = dieIfNil(someObject.methodThatMightReturnNil())
 dieIfNotNil(someObject.methodThatReturnsAnError())
+```
+
+As well as for true or false:
+```swift
+dieIfFalse(fm.isDeletableFileAtPath(sourcePath))
+
+dieOnThrow("Failed to delete \(sourcePath)") {
+    try fm.removeItemAtPath(sourcePath)
+}
+
+dieIfTrue(fm.fileExistsAtURL(sourceURL))
 ```
 
 

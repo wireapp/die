@@ -16,7 +16,6 @@ class DieTests: XCTestCase {
     var callCount = 0
     var exitStatus: Int32?
     var printHistory: [[Any]] = []
-    let spinQueue = NSThread.sleepForTimeInterval
     var expectation: XCTestExpectation?
 
     // MARK: - Mocking
@@ -25,7 +24,7 @@ class DieTests: XCTestCase {
         exitStatus = status
         callCount++
         expectation?.fulfill()
-        repeat { spinQueue(0.1) } while (true)
+        repeat { NSThread.sleepForTimeInterval(0.1) } while (true)
     }
 
     func mockPrint(items: Any...) {
@@ -146,7 +145,7 @@ class DieTests: XCTestCase {
 
         // then
         XCTAssertEqual(printHistory.count, 3)
-        let errorMessage = printHistory.first!
+        guard let errorMessage = printHistory.first else { return XCTFail() }
         XCTAssertEqual(errorMessage.first as? String, "Error: Error")
         assertMessagePrinted(message, Array(printHistory.dropFirst()))
     }
@@ -167,13 +166,17 @@ class DieTests: XCTestCase {
 
     // MARK: - Helper
 
-    func assertThatItCallsDie(shouldCall: Bool = true, block: () -> Void) {
+    func assertThatItCallsDie(shouldCall: Bool = true, line: UInt = __LINE__ , file: String = __FILE__, block: () -> Void) {
         // when
         dispatchAndWaitForDie(timeout: 2, block: block)
 
         // then
-        XCTAssertEqual(callCount, shouldCall ? 1 : 0)
-        XCTAssertEqual(exitStatus, shouldCall ? EXIT_FAILURE : nil)
+        let expectedCount = shouldCall ? 1 : 0
+        let expectedStatus: Int32? = shouldCall ? EXIT_FAILURE : nil
+        let (countEqual, statusEqual) = (callCount == expectedCount, exitStatus == expectedStatus)
+        let fail: String -> Void = { self.recordFailureWithDescription($0, inFile: file, atLine: line, expected: true) }
+        if !countEqual { fail("Incorrect die callcount, \(expectedCount) is not equal to \(callCount)") }
+        if !statusEqual { fail("Incorrect exit status, \(expectedStatus) is not equal to \(exitStatus)") }
     }
 
     func assertMessagePrinted(message: String, _ history: [[Any]]) {

@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AFA1D9FD1C90B4F600C65B90"
+               BuildableName = "DieTests.xctest"
+               BlueprintName = "DieTests"
+               ReferencedContainer = "container:Die.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "BF0D678B1C8DCD25007CE00F"
+            BuildableName = "Die.framework"
+            BlueprintName = "Die"
+            ReferencedContainer = "container:Die.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

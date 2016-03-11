@@ -9,25 +9,22 @@ let newline = "\n"
 
 /// Prints the current callstack symbols before calling exit(EXIT_FAILURE)
 /// - parameter message: The error message to print as failure reason
-@noreturn public func die(@autoclosure message: () -> String) {
-    internalPrint(message(), newline)
-    die()
-}
-
-/// Prints the current callstack symbols before calling exit(EXIT_FAILURE)
-@noreturn public func die() {
+@noreturn public func die(@autoclosure message: () -> String = String()) {
+    if !message().isEmpty {
+        internalPrint(message(), newline)
+    }
     internalPrint(NSThread.callStackSymbols().joinWithSeparator(newline))
     internalExit(EXIT_FAILURE)
 }
 
-/// Dies if the boolean result of @c closure is @c true
-public func dieIfTrue(@autoclosure closure: () -> Bool) {
-    dieIfFalse(!closure())
+/// Dies if the boolean result of @c condition is @c true
+public func dieIfTrue(@autoclosure condition: () -> Bool) {
+    dieIfFalse(!condition())
 }
 
-/// Dies if the boolean result of @c closure is @c false
-public func dieIfFalse(@autoclosure closure: () -> Bool) {
-    guard closure() else { die() }
+/// Dies if the boolean result of @c condition is @c false
+public func dieIfFalse(@autoclosure condition: () -> Bool) {
+    guard condition() else { die() }
 }
 
 /// Returns the result of @c closure or dies if the result is nil
@@ -47,7 +44,7 @@ public func dieIfNotNil(@autoclosure closure: () -> Any?) {
 /// - parameter message: The error message to print as failure reason
 /// - parameter block: The block to execute in which a throw will cause a die()
 /// - returns: The return value of the block is forwarded
-public func dieOnThrow<T>(@autoclosure message: () -> String, @noescape block: () throws -> T) -> T {
+public func dieOnThrow<T>(@autoclosure message: () -> String = String(), @noescape block: () throws -> T) -> T {
     do {
         return try block()
     } catch {
@@ -55,18 +52,6 @@ public func dieOnThrow<T>(@autoclosure message: () -> String, @noescape block: (
         die(message)
     }
 }
-
-/// Convenience method to execute throwing functions and die on throw
-/// - parameter block: The block to execute in which a throw will cause a die()
-/// - returns: The return value of the block is forwarded
-public func dieOnThrow<T>(@noescape block: () throws -> T) -> T {
-    do {
-        return try block()
-    } catch {
-        die("Error: \(error)")
-    }
-}
-
 
 // MARK: - Testing
 

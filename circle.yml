@@ -1,0 +1,5 @@
+test:
+  override:
+    - xcodebuild clean test -scheme Die
+  post:
+    - bash <(curl -s https://codecov.io/bash)

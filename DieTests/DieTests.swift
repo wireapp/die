@@ -22,7 +22,7 @@ class DieTests: XCTestCase {
 
     @noreturn private func mockExit(status: Int32) {
         exitStatus = status
-        callCount++
+        callCount += 1
         expectation?.fulfill()
         repeat { NSThread.sleepForTimeInterval(0.1) } while (true)
     }
@@ -166,7 +166,7 @@ class DieTests: XCTestCase {
 
     // MARK: - Helper
 
-    func assertThatItCallsDie(shouldCall: Bool = true, line: UInt = __LINE__ , file: String = __FILE__, block: () -> Void) {
+    func assertThatItCallsDie(shouldCall: Bool = true, line: UInt = #line , file: String = #file, block: () -> Void) {
         // when
         dispatchAndWaitForDie(timeout: 2, block: block)
 

@@ -1,4 +1,6 @@
-## Die, μ-framework to exit swift scripts    <a href='https://circleci.com/gh/daehn/Equal/tree/master' target='_blank'><img src='https://circleci.com/gh/daehn/die.svg?style=svg' height='20px' /></a> [![codecov.io](https://codecov.io/github/daehn/die/coverage.svg?branch=develop)](https://codecov.io/github/daehn/die?branch=develop) [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+## Die, μ-framework to exit swift scripts    
+<a href='https://circleci.com/gh/daehn/Equal/tree/master' target='_blank'><img src='https://circleci.com/gh/daehn/die.svg?style=svg' height='20px' /></a> [![codecov.io](https://codecov.io/github/daehn/die/coverage.svg?branch=develop)](https://codecov.io/github/daehn/die?branch=develop) ![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ### Usage
 

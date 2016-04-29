@@ -15,7 +15,7 @@ class DieTests: XCTestCase {
 
     var callCount = 0
     var exitStatus: Int32?
-    var printHistory: [[Any]] = []
+    var printHistory = [String]()
     var expectation: XCTestExpectation?
 
     // MARK: - Mocking
@@ -28,7 +28,7 @@ class DieTests: XCTestCase {
     }
 
     func mockPrint(items: Any...) {
-        printHistory.append(items)
+        printHistory.appendContentsOf(items.flatMap { $0 as? String })
     }
 
     // MARK: - Setup
@@ -59,13 +59,14 @@ class DieTests: XCTestCase {
     func testThatItCallsExitAndPrintsTheMessageAndNewline() {
         // given
         let message = "🚫"
+        let line: UInt = 9
 
         // when
-        assertThatItCallsDie { die(message) }
+        assertThatItCallsDie { die(message, line: line) }
 
         // then
         XCTAssertEqual(printHistory.count, 2)
-        assertMessagePrinted(message, printHistory)
+        assertMessagePrinted(message, printHistory, line: line)
     }
 
     func testThatItCallsDieIfFalseIfExpressionEvalutesToFalse() {
@@ -96,18 +97,23 @@ class DieTests: XCTestCase {
     }
 
     func testThatItCallsDieIfNotNil() {
+        // given
+        let line: UInt = 15
+        
         // when
         assertThatItCallsDie {
-            dieIfNotNil(42)
+            dieIfNotNil(42, line: line)
         }
 
         // then
-        assertMessagePrinted("Object was supposed to be nil: 42", printHistory)
+        assertMessagePrinted("Object was supposed to be nil: 42", printHistory, line: line)
     }
 
     func testThatItCallsDieIfNil() {
+        let optional: Int? = .None
+        
         assertThatItCallsDie {
-            dieIfNil(nil)
+            dieIfNil(optional)
         }
     }
 
@@ -135,10 +141,11 @@ class DieTests: XCTestCase {
     func testThatItCallsDieAndPrintsTheMessageOnThrow() {
         // given
         let message = "🚫"
+        let line: UInt = #line
 
         // when
         assertThatItCallsDie {
-            dieOnThrow(message) {
+            dieOnThrow(message, line: line) {
                 throw "Error"
             }
         }
@@ -146,8 +153,8 @@ class DieTests: XCTestCase {
         // then
         XCTAssertEqual(printHistory.count, 3)
         guard let errorMessage = printHistory.first else { return XCTFail() }
-        XCTAssertEqual(errorMessage.first as? String, "Error: Error")
-        assertMessagePrinted(message, Array(printHistory.dropFirst()))
+        XCTAssertEqual(errorMessage, "Error: Error")
+        assertMessagePrinted(message, Array(printHistory.dropFirst()), line: line)
     }
 
     func testThatItDoesNotCallDieIfItDoesNotThrow() {
@@ -179,11 +186,11 @@ class DieTests: XCTestCase {
         if !statusEqual { fail("Incorrect exit status, \(expectedStatus) is not equal to \(exitStatus)") }
     }
 
-    func assertMessagePrinted(message: String, _ history: [[Any]]) {
-        guard let print = history.first else { return XCTFail() }
-        XCTAssertEqual(print.count, 2)
-        XCTAssertEqual(print.first as? String, message)
-        XCTAssertEqual(print.last as? String, "\n")
+    func assertMessagePrinted(message: String, _ history: [String], file: StaticString = #file, line: UInt) {
+        guard let historyMessage = history.first, location = history.last else { return XCTFail() }
+        XCTAssertEqual(historyMessage, message)
+        XCTAssertTrue(location.containsString(String(file)))
+        XCTAssertTrue(location.containsString("line \(line)"))
     }
 
     func dispatch(block: dispatch_block_t) {

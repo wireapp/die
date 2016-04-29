@@ -4,7 +4,7 @@
 
 ### Usage
 
-Calling `die()` or `die("Oh no!")` prints the current callstack, the optional message and calls `exit(EXIT_FAILURE)` afterwards. There also are multiple convenience functions to work with throwing functions:
+Calling `die()` or `die("Oh no!")` prints the name of the file, the location of the error and the optional message and calls `exit(EXIT_FAILURE)` afterwards. There also are multiple convenience functions to work with throwing functions:
 
 ```swift
 dieOnThrow {

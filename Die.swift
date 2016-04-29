@@ -60,5 +60,6 @@ var internalExit = exit
 var internalPrint = _internalPrint
 
 func _internalPrint(items: Any...) {
-    print(items.joinWithSeparator(" "))
+    let output = items.map { "\($0)" }.joinWithSeparator(" ")
+    print(output)
 }

@@ -5,38 +5,37 @@
 //  Copyright © 2016 Silvan Dähn. All rights reserved.
 //
 
-let newline = "\n"
 
 /// Prints the current callstack symbols before calling exit(EXIT_FAILURE)
 /// - parameter message: The error message to print as failure reason
-@noreturn public func die(@autoclosure message: () -> String = String()) {
+@noreturn public func die(@autoclosure message: () -> String = String(), file: StaticString = #file, line: UInt = #line) {
     if !message().isEmpty {
-        internalPrint(message(), newline)
+        internalPrint(message())
     }
-    internalPrint(NSThread.callStackSymbols().joinWithSeparator(newline))
+    internalPrint("🚫  Failure in \(file) at line \(line)")
     internalExit(EXIT_FAILURE)
 }
 
 /// Dies if the boolean result of @c condition is @c true
-public func dieIfTrue(@autoclosure condition: () -> Bool) {
-    dieIfFalse(!condition())
+public func dieIfTrue(@autoclosure condition: () -> Bool, file: StaticString = #file, line: UInt = #line) {
+    dieIfFalse(!condition(), file: file, line: line)
 }
 
 /// Dies if the boolean result of @c condition is @c false
-public func dieIfFalse(@autoclosure condition: () -> Bool) {
-    guard condition() else { die() }
+public func dieIfFalse(@autoclosure condition: () -> Bool, file: StaticString = #file, line: UInt = #line) {
+    guard condition() else { die(file: file, line: line) }
 }
 
 /// Returns the result of @c closure or dies if the result is nil
-public func dieIfNil<T>(@autoclosure closure: () -> T?) -> T {
-    guard let result = closure() else { die() }
+public func dieIfNil<T>(@autoclosure closure: () -> T?, file: StaticString = #file, line: UInt = #line) -> T {
+    guard let result = closure() else { die(file: file, line: line) }
     return result
 }
 
 /// Dies if the result of @c closure is not nil, useful when checking for errors
-public func dieIfNotNil(@autoclosure closure: () -> Any?) {
+public func dieIfNotNil(@autoclosure closure: () -> Any?, file: StaticString = #file, line: UInt = #line) {
     if let object = closure() {
-        die("Object was supposed to be nil: \(object)")
+        die("Object was supposed to be nil: \(object)", file: file, line: line)
     }
 }
 
@@ -44,12 +43,12 @@ public func dieIfNotNil(@autoclosure closure: () -> Any?) {
 /// - parameter message: The error message to print as failure reason
 /// - parameter block: The block to execute in which a throw will cause a die()
 /// - returns: The return value of the block is forwarded
-public func dieOnThrow<T>(@autoclosure message: () -> String = String(), @noescape block: () throws -> T) -> T {
+public func dieOnThrow<T>(@autoclosure message: () -> String = String(), file: StaticString = #file, line: UInt = #line, @noescape block: () throws -> T) -> T {
     do {
         return try block()
     } catch {
         internalPrint("Error: \(error)")
-        die(message)
+        die(message, file: file, line: line)
     }
 }
 

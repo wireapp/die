@@ -187,7 +187,7 @@ class DieTests: XCTestCase {
     }
 
     func dispatch(block: dispatch_block_t) {
-        let queue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)
+        let queue = dispatch_queue_create("test", DISPATCH_QUEUE_SERIAL)
         dispatch_async(queue, block)
     }
 

@@ -183,7 +183,7 @@ class DieTests: XCTestCase {
         let (countEqual, statusEqual) = (callCount == expectedCount, exitStatus == expectedStatus)
         let fail: (String) -> Void = { self.recordFailure(withDescription: $0, inFile: file, atLine: line, expected: true) }
         if !countEqual { fail("Incorrect die callcount, \(expectedCount) is not equal to \(callCount)") }
-        if !statusEqual { fail("Incorrect exit status, \(expectedStatus) is not equal to \(exitStatus)") }
+        if !statusEqual { fail("Incorrect exit status, \(String(describing: expectedStatus)) is not equal to \(String(describing: exitStatus)))") }
     }
 
     func assertMessagePrinted(_ message: String, _ history: [String], file: StaticString = #file, line: UInt) {

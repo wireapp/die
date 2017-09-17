@@ -20,6 +20,7 @@
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import Foundation
 
 /// Prints the current callstack symbols before calling exit(EXIT_FAILURE)
 /// - parameter message: The error message to print as failure reason

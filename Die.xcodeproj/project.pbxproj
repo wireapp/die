@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AFA1DA031C90B4F600C65B90 /* Die.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF0D678C1C8DCD25007CE00F /* Die.framework */; };
-		AFA1DA0B1C90B50700C65B90 /* DieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DA091C90B50700C65B90 /* DieTests.swift */; };
+		AFA1DA0B1C90B50700C65B90 /* Die.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA1DA091C90B50700C65B90 /* Die.swift */; };
 		BF0D67901C8DCD25007CE00F /* Die.h in Headers */ = {isa = PBXBuildFile; fileRef = BF0D678F1C8DCD25007CE00F /* Die.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BF0D67981C8DCD2B007CE00F /* Die.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0D67971C8DCD2B007CE00F /* Die.swift */; };
 /* End PBXBuildFile section */
@@ -25,12 +25,12 @@
 
 /* Begin PBXFileReference section */
 		AFA1D9FE1C90B4F600C65B90 /* DieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AFA1DA091C90B50700C65B90 /* DieTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DieTests.swift; sourceTree = "<group>"; };
+		AFA1DA091C90B50700C65B90 /* Die.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Die.swift; path = ../Die/Die.swift; sourceTree = "<group>"; };
 		AFA1DA0A1C90B50700C65B90 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF0D678C1C8DCD25007CE00F /* Die.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Die.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF0D678F1C8DCD25007CE00F /* Die.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Die.h; sourceTree = "<group>"; };
 		BF0D67911C8DCD25007CE00F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BF0D67971C8DCD2B007CE00F /* Die.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Die.swift; sourceTree = SOURCE_ROOT; };
+		BF0D67971C8DCD2B007CE00F /* Die.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Die.swift; path = Die/Die.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 		AFA1D9FF1C90B4F600C65B90 /* DieTests */ = {
 			isa = PBXGroup;
 			children = (
-				AFA1DA091C90B50700C65B90 /* DieTests.swift */,
+				AFA1DA091C90B50700C65B90 /* Die.swift */,
 				AFA1DA0A1C90B50700C65B90 /* Info.plist */,
 			);
 			path = DieTests;
@@ -146,16 +146,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Silvan Dähn";
 				TargetAttributes = {
 					AFA1D9FD1C90B4F600C65B90 = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 					BF0D678B1C8DCD25007CE00F = {
 						CreatedOnToolsVersion = 7.2.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 					};
 				};
 			};
@@ -199,7 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFA1DA0B1C90B50700C65B90 /* DieTests.swift in Sources */,
+				AFA1DA0B1C90B50700C65B90 /* Die.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,7 +232,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = de.silvandaehn.DieTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -245,7 +245,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = de.silvandaehn.DieTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -257,14 +257,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -306,14 +312,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -358,7 +370,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -379,7 +391,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.silvandaehn.Die;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

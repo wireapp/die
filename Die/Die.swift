@@ -64,7 +64,7 @@ public func dieOnThrow<T>(_ message: @autoclosure () -> String = String(), file:
         return try block()
     } catch {
         internalPrint("Error: \(error)")
-        die(message, file: file, line: line)
+        die(message(), file: file, line: line)
     }
 }
 
